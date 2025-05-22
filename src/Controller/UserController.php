@@ -37,25 +37,21 @@ class UserController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-        if ($form->isValid()) {
-            // Traitement du mot de passe
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hachage du mot de passe
             $plainPassword = $form->get('motdepasse')->getData();
             if ($plainPassword) {
-                $user->setMotdepasse(
-                    $passwordHasher->hashPassword($user, $plainPassword)
-                );
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setMotdepasse($hashedPassword);
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Utilisateur créé avec succès');
-            return $this->redirectToRoute('app_user_index');
-        } else {
-            $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire');
+            $this->addFlash('success', 'L\'utilisateur a été créé avec succès.');
+
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
-    }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,

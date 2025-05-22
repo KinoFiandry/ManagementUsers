@@ -1,79 +1,28 @@
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvel Utilisateur{% endblock %}
+{% block title %}Nouvel utilisateur{% endblock %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_user_index') }}">Utilisateurs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Nouveau</li>
+        </ol>
+    </nav>
+{% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="h4 mb-0">Création d'un utilisateur</h1>
-                </div>
-                
-                <div class="card-body">
-                    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-                    
-                        {# Affichage des erreurs globales #}
-                        {% if form.vars.errors|length > 0 %}
-                            <div class="alert alert-danger">
-                                {{ form_errors(form) }}
-                            </div>
-                        {% endif %}
-                        
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                {{ form_label(form.nom, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                                <div class="invalid-feedback">
-                                    {{ form_errors(form.nom) }}
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                {{ form_label(form.prenom, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
-                                <div class="invalid-feedback">
-                                    {{ form_errors(form.prenom) }}
-                                </div>
-                            </div>
-                            
-                            <div class="col-12">
-                                {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                                <div class="invalid-feedback">
-                                    {{ form_errors(form.email) }}
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                {{ form_label(form.motdepasse.first, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.motdepasse.first, {'attr': {'class': 'form-control'}}) }}
-                                <div class="invalid-feedback">
-                                    {{ form_errors(form.motdepasse.first) }}
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                {{ form_label(form.motdepasse.second, null, {'label_attr': {'class': 'form-label'}}) }}
-                                {{ form_widget(form.motdepasse.second, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary me-md-2">
-                                <i class="bi bi-arrow-left"></i> Annuler
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-save"></i> Enregistrer
-                            </button>
-                        </div>
-                    
-                    {{ form_end(form) }}
-                </div>
-            </div>
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h1 class="h4 mb-0"><i class="bi bi-person-plus"></i> Créer un utilisateur</h1>
+        </div>
+        
+        <div class="card-body">
+            {{ include('components/form.html.twig', {
+                form: form,
+                submit_label: 'Créer',
+                cancel_path: path('app_user_index')
+            }) }}
         </div>
     </div>
-</div>
 {% endblock %}

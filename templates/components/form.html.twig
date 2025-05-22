@@ -1,0 +1,82 @@
+{# templates/components/form.html.twig #}
+
+{% if form.vars.errors|length > 0 %}
+    <div class="alert alert-danger">
+        {{ form_errors(form) }}
+    </div>
+{% endif %}
+
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+    {% for child in form %}
+        {% if child.vars.name != '_token' %}
+            <div class="mb-3">
+                {{ form_label(child, null, {
+                    'label_attr': {'class': 'form-label'}
+                }) }}
+                
+                {% if child.vars.name == 'motdepasse' %}
+                    <div class="input-group">
+                        {{ form_widget(child.first, {
+                            'attr': {
+                                'class': 'form-control' ~ (child.first.vars.errors|length ? ' is-invalid' : ''),
+                                'autocomplete': 'new-password'
+                            }
+                        }) }}
+                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        {{ form_errors(child.first) }}
+                    </div>
+                    
+                    <div class="mt-2">
+                        {{ form_label(child.second, null, {
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                        {{ form_widget(child.second, {
+                            'attr': {
+                                'class': 'form-control' ~ (child.second.vars.errors|length ? ' is-invalid' : ''),
+                                'autocomplete': 'new-password'
+                            }
+                        }) }}
+                        {{ form_errors(child.second) }}
+                    </div>
+                {% else %}
+                    {{ form_widget(child, {
+                        'attr': {
+                            'class': 'form-control' ~ (child.vars.errors|length ? ' is-invalid' : '')
+                        }
+                    }) }}
+                    {{ form_errors(child) }}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="d-flex justify-content-between">
+        <a href="{{ cancel_path }}" class="btn btn-secondary">
+            <i class="bi bi-x-lg"></i> Annuler
+        </a>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg"></i> {{ submit_label }}
+        </button>
+    </div>
+
+{{ form_end(form) }}
+
+{% block javascripts %}
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                const type = input.type === 'password' ? 'text' : 'password';
+                
+                input.type = type;
+                icon.classList.toggle('bi-eye');
+                icon.classList.toggle('bi-eye-slash');
+            });
+        });
+    </script>
+{% endblock %}

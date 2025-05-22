@@ -1,43 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'Utilisateur{% endblock %}
+{% block title %}Détails utilisateur{% endblock %}
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_user_index') }}">Utilisateurs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Détails</li>
+        </ol>
+    </nav>
+{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1 class="mb-4">Détails de l'utilisateur</h1>
-
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th class="w-25">ID</th>
-                            <td>{{ user.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>Nom</th>
-                            <td>{{ user.nom }}</td>
-                        </tr>
-                        <tr>
-                            <th>Prénom</th>
-                            <td>{{ user.prenom }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ user.email }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{{ path('app_user_index') }}" class="btn btn-secondary me-md-2">
-                        <i class="bi bi-arrow-left"></i> Retour à la liste
-                    </a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning me-md-2">
-                        <i class="bi bi-pencil"></i> Modifier
-                    </a>
-                    {{ include('user/_delete_form.html.twig') }}
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">
+                <i class="bi bi-person-circle"></i> {{ user.prenom }} {{ user.nom }}
+            </h1>
+            <div class="btn-group">
+                <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-pencil"></i> Modifier
+                </a>
+                {{ include('user/_delete_form.html.twig') }}
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h5 class="text-muted">Informations personnelles</h5>
+                        <hr>
+                        <dl class="row">
+                            <dt class="col-sm-4">ID</dt>
+                            <dd class="col-sm-8">{{ user.id }}</dd>
+                            
+                            <dt class="col-sm-4">Nom</dt>
+                            <dd class="col-sm-8">{{ user.nom }}</dd>
+                            
+                            <dt class="col-sm-4">Prénom</dt>
+                            <dd class="col-sm-8">{{ user.prenom }}</dd>
+                            
+                            <dt class="col-sm-4">Email</dt>
+                            <dd class="col-sm-8">{{ user.email }}</dd>
+                        </dl>
+                    </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h5 class="text-muted">Statistiques</h5>
+                        <hr>
+                        <p>Dernière modification: {{ user.updatedAt|date('d/m/Y H:i') }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="{{ path('app_user_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
             </div>
         </div>
     </div>
