@@ -25,6 +25,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    //methode new
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -36,21 +37,25 @@ class UserController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Hachage du mot de passe
+        if ($form->isSubmitted()) {
+        if ($form->isValid()) {
+            // Traitement du mot de passe
             $plainPassword = $form->get('motdepasse')->getData();
             if ($plainPassword) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-                $user->setMotdepasse($hashedPassword);
+                $user->setMotdepasse(
+                    $passwordHasher->hashPassword($user, $plainPassword)
+                );
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'utilisateur a été créé avec succès.');
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Utilisateur créé avec succès');
+            return $this->redirectToRoute('app_user_index');
+        } else {
+            $this->addFlash('error', 'Veuillez corriger les erreurs dans le formulaire');
         }
+    }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
