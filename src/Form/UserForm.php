@@ -96,12 +96,19 @@ class UserForm extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
+        /* $resolver->setDefaults([
             'data_class' => User::class,
             'is_new' => true,
             'attr' => ['novalidate' => 'novalidate'] // Désactive la validation HTML5 pour utiliser Symfony
         ]);
 
-        $resolver->setAllowedTypes('is_new', 'bool');
+        $resolver->setAllowedTypes('is_new', 'bool'); */
+        $resolver->setDefaults([
+        'data_class' => User::class,
+        'is_new' => true,
+        'csrf_protection' => true,
+        'csrf_field_name' => '_token',
+        'csrf_token_id' => 'user_item',
+    ]);
     }
 }

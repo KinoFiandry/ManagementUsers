@@ -39,11 +39,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank(message: "L'email est obligatoire")]
     #[Assert\Email(message: "L'email {{ value }} n'est pas valide")]
-
     private ?string $email = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ['registration'])]
     private ?string $motdepasse = null;
+    
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 

@@ -1,32 +1,94 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}User Management{% endblock %}</title>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}User Management{% endblock %}</title>
+    
+    {# Favicon #}
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    
+    {# CSS #}
+    {% block stylesheets %}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-        {% block stylesheets %}
-            {{ importmap() }}
-        {% endblock %}
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        {{ importmap('app') }}
+    {% endblock %}
+    
+    {# JavaScript en tête #}
+    {% block javascripts_head %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    {# Barre de navigation #}
+    {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
             <div class="container">
-                <a class="navbar-brand" href="{{ path('app_user_index') }}">User Management</a>
+                <a class="navbar-brand" href="{{ path('app_user_index') }}">
+                    <i class="bi bi-people-fill"></i> User Management
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link{{ app.request.get('_route') == 'app_user_index' ? ' active' }}" 
+                               href="{{ path('app_user_index') }}">
+                                <i class="bi bi-list-ul"></i> Liste utilisateurs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{{ app.request.get('_route') == 'app_user_new' ? ' active' }}" 
+                               href="{{ path('app_user_new') }}">
+                                <i class="bi bi-plus-circle"></i> Nouvel utilisateur
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
+    {% endblock %}
 
-        <div class="container">
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success mt-4">
-                    {{ message }}
-                </div>
+    {# Contenu principal #}
+    <main class="flex-grow-1">
+        <div class="container mb-5">
+            {% block breadcrumb %}{% endblock %}
+            
+            {# Messages flash #}
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
             {% endfor %}
             
             {% block body %}{% endblock %}
         </div>
+    </main>
 
+    {# Pied de page #}
+    {% block footer %}
+        <footer class="bg-dark text-white py-3 mt-auto">
+            <div class="container text-center">
+                <p class="mb-0">&copy; {{ 'now'|date('Y') }} User Management - Symfony 7</p>
+            </div>
+        </footer>
+    {% endblock %}
+
+    {# JavaScript #}
+    {% block javascripts %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        {% block javascripts %}{% endblock %}
-    </body>
+        <script>
+            // Activer les tooltips partout
+            document.addEventListener('DOMContentLoaded', function() {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            });
+        </script>
+    {% endblock %}
+</body>
 </html>
